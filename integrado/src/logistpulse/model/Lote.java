@@ -31,11 +31,15 @@ public class Lote {
     public void agregar(int n) { this.cantidad += n; }
 
     public boolean estaVencido() { return fechaVencimiento.isBefore(LocalDate.now()); }
-    /** Un lote es utilizable si no está vencido ni en cuarentena. */
+    /** Un lote es utilizable si no esta vencido ni en cuarentena. */
     public boolean esUtilizable() { return !estaVencido() && !enCuarentena; }
 
-    @Override
-    public String toString() {
-        return id + "(" + cantidad + " u., vence " + fechaVencimiento + ")";
+    public String estado() {
+        if (enCuarentena) return "CUARENTENA";
+        if (estaVencido()) return "VENCIDO";
+        return "OK";
     }
+
+    @Override
+    public String toString() { return id + "(" + cantidad + " u.)"; }
 }

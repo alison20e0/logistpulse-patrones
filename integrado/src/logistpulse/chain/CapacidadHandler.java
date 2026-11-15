@@ -6,7 +6,6 @@ import logistpulse.model.ReservaRequest;
 public class CapacidadHandler extends ValidationHandler {
     protected void validar(ReservaRequest req, Inventario inv) {
         if (req.cantidad() > inv.capacidadMaximaPorReserva())
-            throw new ReservaInvalidaException(
-                "Excede la capacidad máxima por reserva (" + inv.capacidadMaximaPorReserva() + ")");
+            rechazar("Excede la capacidad maxima por reserva (" + inv.capacidadMaximaPorReserva() + ")");
     }
 }

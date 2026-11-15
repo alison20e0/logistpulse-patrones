@@ -5,9 +5,8 @@ import logistpulse.model.ReservaRequest;
 
 public class SkuHandler extends ValidationHandler {
     protected void validar(ReservaRequest req, Inventario inv) {
-        if (req.sku() == null || !inv.existeSku(req.sku()))
-            throw new ReservaInvalidaException("SKU inexistente: " + req.sku());
-        if (req.cantidad() <= 0)
-            throw new ReservaInvalidaException("La cantidad debe ser mayor a 0");
+        if (!inv.existeSku(req.sku())) rechazar("SKU inexistente: " + req.sku());
+        if (req.cantidad() <= 0) rechazar("La cantidad debe ser mayor a 0");
+        if (req.solicitante() == null || req.solicitante().isBlank()) rechazar("Debe indicar el solicitante");
     }
 }

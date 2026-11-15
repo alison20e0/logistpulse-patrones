@@ -1,9 +1,9 @@
 package logistpulse.strategy;
 
-/** EOQ = raíz(2 * D * S / H). */
+/** EOQ = raiz(2 * D * S / H). Siempre recomienda el tamano de pedido economico. */
 public class EoqPolicy implements ReplenishmentPolicy {
-    private final double costoPedido;       // S
-    private final double costoMantenerUnid; // H
+    private final double costoPedido;
+    private final double costoMantenerUnid;
 
     public EoqPolicy(double costoPedido, double costoMantenerUnid) {
         this.costoPedido = costoPedido;

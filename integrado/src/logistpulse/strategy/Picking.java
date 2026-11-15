@@ -1,24 +1,25 @@
 package logistpulse.strategy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import logistpulse.model.Asignacion;
 import logistpulse.model.Lote;
 
-/** STRATEGY: el CONTEXTO. Delega el orden en la política activa sin conocer su detalle. */
+/** STRATEGY: el CONTEXTO. Politica general y, si se quiere, una distinta por SKU. */
 public class Picking {
-    private PickingPolicy politica;
+    private PickingPolicy general;
+    private final Map<String, PickingPolicy> porSku = new HashMap<>();
 
-    public Picking(PickingPolicy politica) { this.politica = politica; }
+    public Picking(PickingPolicy general) { this.general = general; }
 
-    /** Cambia el algoritmo en tiempo de ejecución. */
-    public void setPolitica(PickingPolicy politica) { this.politica = politica; }
-    public PickingPolicy getPolitica() { return politica; }
+    public void setPoliticaGeneral(PickingPolicy p) { this.general = p; porSku.clear(); }
+    public void setPoliticaSku(String sku, PickingPolicy p) { porSku.put(sku, p); }
+    public PickingPolicy getGeneral() { return general; }
+    public PickingPolicy politicaPara(String sku) { return porSku.getOrDefault(sku, general); }
 
-    public List<Asignacion> seleccionar(List<Lote> lotesUtilizables, int cantidad) {
+    public List<Asignacion> seleccionar(String sku, List<Lote> lotesUtilizables, int cantidad) {
         List<Asignacion> resultado = new ArrayList<>();
         int pendiente = cantidad;
-        for (Lote lote : politica.ordenar(lotesUtilizables)) {
+        for (Lote lote : politicaPara(sku).ordenar(lotesUtilizables)) {
             if (pendiente == 0) break;
             int tomar = Math.min(lote.getCantidad(), pendiente);
             if (tomar > 0) {
